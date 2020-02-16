@@ -1,0 +1,22 @@
+<idea-plugin>
+    <id>com.vuvarov.marketplace.intellij.amq.plugin</id>
+    <name>Навигация по самописным шаблонам</name>
+    <vendor email="vova.uvarov@gmail.com" url="http://www.rashod.com">My Company</vendor>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <codeInsight.lineMarkerProvider language="JAVA"
+                                        implementationClass="com.vuvarov.marketplace.Front2BackMessageLineMarkerProvider">
+
+        </codeInsight.lineMarkerProvider>
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+</idea-plugin>
