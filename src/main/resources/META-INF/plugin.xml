@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>com.vuvarov.marketplace.intellij.amq.plugin</id>
-    <name>Навигация по самописным шаблонам</name>
+    <name>MarketPlace Sender/Listener navigation</name>
     <vendor email="vova.uvarov@gmail.com" url="http://www.rashod.com">My Company</vendor>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
