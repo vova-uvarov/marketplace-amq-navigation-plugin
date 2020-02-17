@@ -58,7 +58,7 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
         if (qualifierType != null && qualifierType.startsWith(JMS_LISTENER_CLASS_NAME) && LISTENER_METHODS.contains(methodName)) {
             String mqEntity = argumentValue((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
             if (mqEntity != null) {
-                Collection<? extends PsiElement> cachedElements = PsiCacheUtils.getCachedElements(element, () -> searchListeners(element));
+                Collection<? extends PsiElement> cachedElements = PsiCacheUtils.getCachedElements(element, () -> searchSenders(element));
                 NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.LISTENER)
                         .setTargets(NotNullLazyValue.createValue(() -> cachedElements))
                         .setTooltipText("Navigate to Sender");
