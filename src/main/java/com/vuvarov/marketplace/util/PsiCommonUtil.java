@@ -66,6 +66,10 @@ public class PsiCommonUtil {
         return Collections.emptyList();
     }
 
+    public static Module getModule(PsiElement element) {
+        return ModuleUtilCore.findModuleForPsiElement(element);
+    }
+
     public static GlobalSearchScope getScope(PsiElement element) {
         Module module = ModuleUtilCore.findModuleForPsiElement(element);
         if (module != null) {

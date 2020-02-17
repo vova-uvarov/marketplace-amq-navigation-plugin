@@ -14,6 +14,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.tree.java.PsiMethodCallExpressionImpl;
 import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.util.Query;
+import com.vuvarov.marketplace.util.PsiCacheUtils;
 import com.vuvarov.marketplace.util.PsiCommonUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,10 +44,12 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
         String qualifierType = getQuelifierClassName((PsiMethodCallExpression) element);
         String methodName = getCallMethodName((PsiMethodCallExpressionImpl) element);
         if (AMQUTIL_CLASS_NAME.equals(qualifierType) && SENDER_METHODS.contains(methodName)) {
+
             String mqEntity = argumentValue((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
             if (mqEntity != null) {
+                Collection<? extends PsiElement> cachedElements = PsiCacheUtils.getCachedElements(element, () -> searchListeners(element));
                 NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.SENDER)
-                        .setTargets(NotNullLazyValue.createValue(() -> searchListeners(element)))
+                        .setTargets(NotNullLazyValue.createValue(() -> cachedElements))
                         .setTooltipText("Navigate to Listeners");
                 result.add(gutterIcon.createLineMarkerInfo(element));
             }
@@ -55,8 +58,9 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
         if (qualifierType != null && qualifierType.startsWith(JMS_LISTENER_CLASS_NAME) && LISTENER_METHODS.contains(methodName)) {
             String mqEntity = argumentValue((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
             if (mqEntity != null) {
+                Collection<? extends PsiElement> cachedElements = PsiCacheUtils.getCachedElements(element, () -> searchListeners(element));
                 NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.LISTENER)
-                        .setTargets(NotNullLazyValue.createValue(() -> searchSenders(element)))
+                        .setTargets(NotNullLazyValue.createValue(() -> cachedElements))
                         .setTooltipText("Navigate to Sender");
                 result.add(gutterIcon.createLineMarkerInfo(element));
             }
