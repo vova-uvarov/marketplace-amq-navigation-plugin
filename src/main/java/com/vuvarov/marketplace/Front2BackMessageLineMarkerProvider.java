@@ -16,7 +16,10 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.psi.PsiReturnStatement;
+import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiType;
+import com.intellij.psi.impl.source.tree.java.PsiMethodCallExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.util.Query;
@@ -46,21 +49,31 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
         // This must be an element with a literal expression as a parent
         if (!(element instanceof PsiMethodCallExpression)) return;
         String qualifierType = getQualifierType((PsiMethodCallExpression) element);
-
-        if (AMQUTIL_CLASS_NAME.equals(qualifierType)) { // todo тут еще имя вызываемого метода нужно проверять
-            NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.SENDER)
-                    .setTargets(NotNullLazyValue.createValue(() -> searchListeners(element)))
-                    .setTooltipText("Navigate to Listeners");
-            result.add(gutterIcon.createLineMarkerInfo(element));
+        String methodName = getMethodName((PsiMethodCallExpressionImpl) element);
+        if (AMQUTIL_CLASS_NAME.equals(qualifierType) && SENDER_METHODS.contains(methodName)) {
+            String mqEntity = argumentValue((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
+            if (mqEntity != null) {
+                NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.SENDER)
+                        .setTargets(NotNullLazyValue.createValue(() -> searchListeners(element)))
+                        .setTooltipText("Navigate to Listeners");
+                result.add(gutterIcon.createLineMarkerInfo(element));
+            }
         }
 
-        if (qualifierType != null && qualifierType.startsWith(JMS_LISTENER_CLASS_NAME)) {
-            NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.LISTENER)
-                    .setTargets(NotNullLazyValue.createValue(() -> searchSenders(element)))
-                    .setTooltipText("Navigate to Sender");
-            result.add(gutterIcon.createLineMarkerInfo(element));
+        if (qualifierType != null && qualifierType.startsWith(JMS_LISTENER_CLASS_NAME) && LISTENER_METHODS.contains(methodName)) {
+            String mqEntity = argumentValue((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
+            if (mqEntity != null) {
+                NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.LISTENER)
+                        .setTargets(NotNullLazyValue.createValue(() -> searchSenders(element)))
+                        .setTooltipText("Navigate to Sender");
+                result.add(gutterIcon.createLineMarkerInfo(element));
+            }
         }
 
+    }
+
+    private String getMethodName(@NotNull PsiMethodCallExpressionImpl element) {
+        return element.getMethodExpression().getReferenceName();
     }
 
     @NotNull
@@ -141,7 +154,31 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
     }
 
     private String argumentValue(PsiMethodCallExpression methodCallExpression, int index) {
-        PsiReference reference = methodCallExpression.getArgumentList().getExpressions()[index].getReference();
+        PsiExpression argumentExpression = methodCallExpression.getArgumentList().getExpressions()[index];
+        String expressionValue = valueFromExpression(argumentExpression);
+        if (expressionValue != null) {
+            return expressionValue;
+        }
+        if (argumentExpression instanceof PsiMethodCallExpression) {
+            PsiMethod psiMethod = ((PsiMethodCallExpression) argumentExpression).resolveMethod();
+            if (psiMethod != null) {
+                PsiStatement[] statements = psiMethod.getBody().getStatements();
+                PsiReturnStatement returnStatement = (PsiReturnStatement) Arrays.stream(statements)
+                        .filter(s -> s instanceof PsiReturnStatement)
+                        .findAny()
+                        .orElse(null);
+
+                if (returnStatement != null) {
+                    PsiExpression returnValue = returnStatement.getReturnValue();
+                    return valueFromExpression(returnValue);
+                }
+            }
+        }
+        return null;
+    }
+
+    private String valueFromExpression(PsiExpression expression) {
+        PsiReference reference = expression.getReference();
         if (reference != null) {
             PsiElement resolvedElement = reference.resolve();
             if (resolvedElement instanceof PsiEnumConstant) {
