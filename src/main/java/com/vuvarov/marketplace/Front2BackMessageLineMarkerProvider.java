@@ -130,6 +130,10 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
             if (resolvedElement instanceof PsiEnumConstant) {
                 return ((PsiEnumConstant) resolvedElement).getName();
             }
+
+            if (resolvedElement instanceof PsiLocalVariable) {
+                return valueFromExpression(((PsiLocalVariable) resolvedElement).getInitializer());
+            }
         }
         return null;
     }
