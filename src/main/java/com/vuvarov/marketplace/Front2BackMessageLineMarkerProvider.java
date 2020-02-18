@@ -17,9 +17,7 @@ import com.intellij.psi.impl.source.tree.java.PsiMethodCallExpressionImpl;
 import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.util.Query;
-import com.vuvarov.marketplace.util.PsiCacheUtils;
 import com.vuvarov.marketplace.util.PsiCommonUtil;
-import org.apache.commons.collections.SetUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -53,10 +51,8 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
 
             Set<String> mqEntity = argumentValues((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
             if (!mqEntity.isEmpty()) {
-                Collection<? extends PsiElement> cachedElements = PsiCacheUtils.getCachedElements(element, () -> searchListeners(element));
-
                 NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.SENDER)
-                        .setTargets(NotNullLazyValue.createValue(() -> cachedElements))
+                        .setTargets(NotNullLazyValue.createValue(() -> searchListeners(element)))
                         .setTooltipText("Navigate to Listeners");
                 result.add(gutterIcon.createLineMarkerInfo(getMethodNameElement((PsiMethodCallExpression) element)));
             }
@@ -65,14 +61,12 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
         if (qualifierType != null && qualifierType.startsWith(JMS_LISTENER_CLASS_NAME) && LISTENER_METHODS.contains(methodName)) {
             Set<String> mqEntity = argumentValues((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
             if (!mqEntity.isEmpty()) {
-                Collection<? extends PsiElement> cachedElements = PsiCacheUtils.getCachedElements(element, () -> searchSenders(element));
                 NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.LISTENER)
-                        .setTargets(NotNullLazyValue.createValue(() -> cachedElements))
+                        .setTargets(NotNullLazyValue.createValue(() -> searchSenders(element)))
                         .setTooltipText("Navigate to Sender");
                 result.add(gutterIcon.createLineMarkerInfo(getMethodNameElement((PsiMethodCallExpression) element)));
             }
         }
-
     }
 
     @NotNull
@@ -119,10 +113,6 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
 
     private Set<String> argumentValues(PsiMethodCallExpression methodCallExpression, int index) {
         PsiExpression argumentExpression = methodCallExpression.getArgumentList().getExpressions()[index];
-        Set<String> expressionValue = valueFromExpression(argumentExpression);
-        if (!expressionValue.isEmpty()) {
-            return expressionValue;
-        }
         if (argumentExpression instanceof PsiMethodCallExpression) {
             PsiMethod psiMethod = ((PsiMethodCallExpression) argumentExpression).resolveMethod();
             if (psiMethod != null) {
@@ -139,7 +129,8 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
                 }
             }
         }
-        return Collections.emptySet();
+
+        return valueFromExpression(argumentExpression);
     }
 
     private Set<String> valueFromExpression(PsiExpression expression) {
