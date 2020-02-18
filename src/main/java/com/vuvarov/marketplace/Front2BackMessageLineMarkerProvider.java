@@ -7,10 +7,10 @@ import com.intellij.openapi.util.NotNullLazyValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiEnumConstant;
 import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiLocalVariable;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.PsiVariable;
 import com.intellij.psi.impl.source.tree.java.PsiMethodCallExpressionImpl;
 import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.util.Query;
@@ -136,8 +136,8 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
                 return ((PsiEnumConstant) resolvedElement).getName();
             }
 
-            if (resolvedElement instanceof PsiLocalVariable) {
-                return valueFromExpression(((PsiLocalVariable) resolvedElement).getInitializer());
+            if (resolvedElement instanceof PsiVariable) {
+                return valueFromExpression(((PsiVariable) resolvedElement).getInitializer());
             }
         }
         return null;
