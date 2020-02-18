@@ -142,13 +142,4 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
         }
         return null;
     }
-
-    private PsiElement getFirstChild(PsiElement element) {
-        PsiElement firstChild = element.getFirstChild();
-        if (firstChild != null) {
-            return getFirstChild(firstChild);
-        }
-
-        return element;
-    }
 }
