@@ -8,6 +8,7 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
+import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiReferenceExpression;
@@ -93,6 +94,14 @@ public class PsiCommonUtil {
             }
         }
         return null;
+    }
+
+    public static PsiElement getMethodNameElement(PsiMethodCallExpression element) {
+        PsiElement[] children = element.getMethodExpression().getChildren();
+        return Arrays.stream(children)
+                .filter(e->e instanceof PsiIdentifier)
+                .findAny()
+                .orElse(null);
     }
 
 }

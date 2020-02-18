@@ -48,10 +48,11 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
             String mqEntity = argumentValue((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
             if (mqEntity != null) {
                 Collection<? extends PsiElement> cachedElements = PsiCacheUtils.getCachedElements(element, () -> searchListeners(element));
+
                 NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.SENDER)
                         .setTargets(NotNullLazyValue.createValue(() -> cachedElements))
                         .setTooltipText("Navigate to Listeners");
-                result.add(gutterIcon.createLineMarkerInfo(element));
+                result.add(gutterIcon.createLineMarkerInfo(getMethodNameElement((PsiMethodCallExpression) element)));
             }
         }
 
@@ -62,7 +63,7 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
                 NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(MarketPlaceIcons.LISTENER)
                         .setTargets(NotNullLazyValue.createValue(() -> cachedElements))
                         .setTooltipText("Navigate to Sender");
-                result.add(gutterIcon.createLineMarkerInfo(element));
+                result.add(gutterIcon.createLineMarkerInfo(getMethodNameElement((PsiMethodCallExpression) element)));
             }
         }
 
@@ -140,5 +141,14 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
             }
         }
         return null;
+    }
+
+    private PsiElement getFirstChild(PsiElement element) {
+        PsiElement firstChild = element.getFirstChild();
+        if (firstChild != null) {
+            return getFirstChild(firstChild);
+        }
+
+        return element;
     }
 }
