@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.vuvarov.marketplace.intellij.amq.plugin'
-version '0.0.1'
+version '0.0.2'
 
 sourceCompatibility = 1.8
 
@@ -18,11 +18,13 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2019.3.2'
+    version '2019.3'
     plugins = ['java']
 }
 patchPluginXml {
     changeNotes """
+      0.0.2<br>
+      <em>Навигация из/в AbstractService</em>
       0.0.1<br>
       <em>Навигация между sender и listener, но без абстрактных классов</em>"""
 }
