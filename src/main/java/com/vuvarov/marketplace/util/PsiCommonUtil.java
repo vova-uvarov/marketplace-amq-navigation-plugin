@@ -96,10 +96,10 @@ public class PsiCommonUtil {
         return null;
     }
 
-    public static PsiElement getMethodNameElement(PsiMethodCallExpression element) {
+    public static PsiElement getCallableMethodNameElement(PsiMethodCallExpression element) {
         PsiElement[] children = element.getMethodExpression().getChildren();
         return Arrays.stream(children)
-                .filter(e->e instanceof PsiIdentifier)
+                .filter(e -> e instanceof PsiIdentifier)
                 .findAny()
                 .orElse(null);
     }
