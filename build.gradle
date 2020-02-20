@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.vuvarov.marketplace.intellij.amq.plugin'
-version '0.1.0'
+version '0.1.1'
 
 sourceCompatibility = 1.8
 
@@ -23,7 +23,9 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-        0.0.3<br>
+       0.1.1<br>
+      <em>Косметические изменения</em>
+        0.1.0<br>
       <em>Поправлено отображение спика переходов</em>
       0.0.2<br>
       <em>Навигация из/в AbstractService</em>
