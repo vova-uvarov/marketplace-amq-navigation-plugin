@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.vuvarov.marketplace.intellij.amq.plugin'
-version '0.1.1'
+version '0.1.2'
 
 sourceCompatibility = 1.8
 
@@ -23,6 +23,8 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
+ 0.1.2<br>
+      <em>01ae5168(fix search listener. search abstractlistener adn tour inheritor)</em>
        0.1.1<br>
       <em>Косметические изменения</em>
         0.1.0<br>

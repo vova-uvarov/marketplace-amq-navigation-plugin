@@ -3,7 +3,7 @@
   The <plugins> element contains the description of the plugins available at this repository. Required.
 -->
 <plugins>
-    <plugin id="com.vuvarov.marketplace.intellij.amq.plugin" url="http://ideaplugins.yazago.site:7887/plugins/marketplace-amq-navigation-plugin-0.1.1.zip" version="0.1.1">
+    <plugin id="com.vuvarov.marketplace.intellij.amq.plugin" url="http://ideaplugins.yazago.site:7887/plugins/marketplace-amq-navigation-plugin-0.1.2.zip" version="0.1.2">
         <!--
           The <idea-version> element must match the same element in plugin.xml. Required.
         -->
