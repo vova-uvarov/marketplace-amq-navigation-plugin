@@ -51,20 +51,26 @@ public class PsiCommonUtil {
         if (searchScope == null) {
             return Collections.emptyList();
         }
+        PsiClass listenerConfiguration = getClassByName(searchScope, className);
+
+        if (listenerConfiguration == null) {
+            System.out.println("not found class with name: " + className);
+            return Collections.emptyList();
+        }
+
+        return methodNames.stream()
+                .map(methodName -> listenerConfiguration.findMethodsByName(methodName, false))
+                .flatMap(Stream::of)
+                .collect(Collectors.toList());
+    }
+
+    public static PsiClass getClassByName(GlobalSearchScope searchScope, String className) {
         Project project = searchScope.getProject();
         if (project != null) {
-            JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
-            PsiClass listenerConfiguration = javaPsiFacade.findClass(className, searchScope);
-            if (listenerConfiguration == null) {
-                System.out.println("not found class with name: " + className);
-                return Collections.emptyList();
-            }
-            return methodNames.stream()
-                    .map(methodName -> listenerConfiguration.findMethodsByName(methodName, false))
-                    .flatMap(Stream::of)
-                    .collect(Collectors.toList());
+            JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
+            return psiFacade.findClass(className, searchScope);
         }
-        return Collections.emptyList();
+        return null;
     }
 
     public static Module getModule(PsiElement element) {
@@ -84,16 +90,10 @@ public class PsiCommonUtil {
         return element.getMethodExpression().getReferenceName();
     }
 
-    public static String getQuelifierClassName(PsiMethodCallExpression methodCallExpression) {
-        PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-        PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
-        if (qualifierExpression != null) {
-            PsiType type = qualifierExpression.getType();
-            if (type != null) {
-                return type.getCanonicalText();
-            }
-        }
-        return null;
+    public static PsiClass getQuelifierClass(PsiMethodCallExpression methodCallExpression) {
+        PsiMethod psiMethod = methodCallExpression.resolveMethod();
+        if (psiMethod == null) return null;
+        return psiMethod.getContainingClass();
     }
 
     public static PsiElement getCallableMethodNameElement(PsiMethodCallExpression element) {
