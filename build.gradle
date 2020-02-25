@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.vuvarov.marketplace.intellij.amq.plugin'
-version '0.1.2'
+version '0.1.3'
 
 sourceCompatibility = 1.8
 
@@ -23,14 +23,16 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
- 0.1.2<br>
-      <em>01ae5168(fix search listener. search abstractlistener adn tour inheritor)</em>
-       0.1.1<br>
+       0.1.3<br>
+      <em>add configureConsumer to search listener methods</em>
+      <br>0.1.2<br>
+      <em>fix search listener. search abstractlistener adn tour inheritor</em>
+      <br>0.1.1<br>
       <em>Косметические изменения</em>
-        0.1.0<br>
+      <br>0.1.0<br>
       <em>Поправлено отображение спика переходов</em>
-      0.0.2<br>
+      <br>0.0.2<br>
       <em>Навигация из/в AbstractService</em>
-      0.0.1<br>
+      <br>0.0.1<br>
       <em>Навигация между sender и listener, но без абстрактных классов</em>"""
 }

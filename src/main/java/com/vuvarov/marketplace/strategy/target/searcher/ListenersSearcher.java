@@ -15,7 +15,7 @@ import static com.vuvarov.marketplace.util.PsiCommonUtil.getScope;
 public class ListenersSearcher extends TargetSearcher {
     public static final String BASE_JMS_LISTENER_CLASS_NAME = "ru.openbank.marketplace.util.configuration.listener.AbstractJmsListener";
     //    todo тут по хорошему просто получить всех наследников для BASE_JMS_LISTENER_CLASS_NAME. Пока не разобрался как
-    public static final List<String> LISTENER_METHODS = Arrays.asList("configure", "configureProducer");
+    public static final List<String> LISTENER_METHODS = Arrays.asList("configure", "configureProducer", "configureConsumer");
 
     private static final List<String> JMS_LISTENER_CLASSES = Arrays.asList(BASE_JMS_LISTENER_CLASS_NAME,
             "ru.openbank.marketplace.util.configuration.listener.JsonJmsListener",
