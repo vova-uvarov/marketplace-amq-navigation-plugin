@@ -34,20 +34,22 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
         if (!(element instanceof PsiMethodCallExpression)) return;
 
         PsiClass quelifierClass = getQuelifierClass((PsiMethodCallExpression) element);
-        String qualifierType = quelifierClass.getQualifiedName();
-        String methodName = getCallMethodName((PsiMethodCallExpressionImpl) element);
-        if (isSenderMethod(qualifierType, methodName)) {
+        if (quelifierClass != null) {
+            String qualifierType = quelifierClass.getQualifiedName();
+            String methodName = getCallMethodName((PsiMethodCallExpressionImpl) element);
+            if (isSenderMethod(qualifierType, methodName)) {
 
-            Set<String> mqEntity = calculator.argumentValues((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
-            if (!mqEntity.isEmpty()) {
-                result.add(toListenerMarkerCreator.createLineMarkerInfo((PsiMethodCallExpression) element));
+                Set<String> mqEntity = calculator.argumentValues((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
+                if (!mqEntity.isEmpty()) {
+                    result.add(toListenerMarkerCreator.createLineMarkerInfo((PsiMethodCallExpression) element));
+                }
             }
-        }
 
-        if (isListenerMethod(element, quelifierClass, methodName)) {
-            Set<String> mqEntity = calculator.argumentValues((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
-            if (!mqEntity.isEmpty()) {
-                result.add(toSenderMarkerCreator.createLineMarkerInfo((PsiMethodCallExpression) element));
+            if (isListenerMethod(element, quelifierClass, methodName)) {
+                Set<String> mqEntity = calculator.argumentValues((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
+                if (!mqEntity.isEmpty()) {
+                    result.add(toSenderMarkerCreator.createLineMarkerInfo((PsiMethodCallExpression) element));
+                }
             }
         }
     }
