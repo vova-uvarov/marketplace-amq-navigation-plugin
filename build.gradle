@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.vuvarov.marketplace.intellij.amq.plugin'
-version '0.1.5'
+version '0.1.6'
 
 sourceCompatibility = 1.8
 
@@ -19,6 +19,7 @@ dependencies {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version '2019.3'
+    updateSinceUntilBuild = false
     plugins = ['java']
 }
 patchPluginXml {
