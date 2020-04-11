@@ -16,7 +16,7 @@
         <!-- Add your extensions here -->
     </extensions>
 
-    <idea-version since-build="IU-193" until-build="IU-193.*" />
+    <idea-version since-build="IU-193" until-build="IU-201.*" />
 
     <actions>
         <!-- Add your actions here -->
