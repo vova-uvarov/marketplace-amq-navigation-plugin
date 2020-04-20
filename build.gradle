@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.vuvarov.marketplace.intellij.amq.plugin'
-version '0.1.6'
+version '0.1.7'
 
 sourceCompatibility = 1.8
 
@@ -24,9 +24,11 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      0.1.4<br>
+      <br>0.1.7<br>
+        <em>show message if target not found</em>
+      <br>0.1.4<br>
       <em>fix NPE</em>
-       0.1.3<br>
+       <br>0.1.3<br>
       <em>add configureConsumer to search listener methods</em>
       <br>0.1.2<br>
       <em>fix search listener. search abstractlistener adn tour inheritor</em>
