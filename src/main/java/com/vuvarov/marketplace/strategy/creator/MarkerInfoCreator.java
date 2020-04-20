@@ -17,6 +17,7 @@ public interface MarkerInfoCreator {
         NavigationGutterIconBuilder<PsiElement> gutterIcon = NavigationGutterIconBuilder.create(getIcon())
                 .setTargets(NotNullLazyValue.createValue(() -> searchTargets(element)))
                 .setCellRenderer(new ElementListCellRenderer())
+                .setEmptyPopupText("Target not found")
                 .setTooltipText(getTooltipText());
         return gutterIcon.createLineMarkerInfo(getCallableMethodNameElement(element));
     }
