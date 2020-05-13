@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.impl.source.tree.java.PsiMethodCallExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.InheritanceUtil;
 import com.vuvarov.marketplace.strategy.calculator.ArgumentValueCalculator;
 import com.vuvarov.marketplace.strategy.creator.MarkerInfoCreator;
 import com.vuvarov.marketplace.strategy.creator.ToListenerMarkerInfoCreator;
@@ -21,13 +22,22 @@ import static com.vuvarov.marketplace.strategy.target.searcher.ListenersSearcher
 import static com.vuvarov.marketplace.strategy.target.searcher.SendersSearcher.AMQUTIL_CLASS_NAME;
 import static com.vuvarov.marketplace.strategy.target.searcher.SendersSearcher.SENDER_METHODS;
 import static com.vuvarov.marketplace.strategy.target.searcher.TargetSearcher.MQENTITY_ARGUMENT_INDEX;
+import static com.vuvarov.marketplace.strategy.target.searcher.TargetSearcher.MQOPERATION_ARGUMENT_INDEX;
 import static com.vuvarov.marketplace.util.PsiCommonUtil.*;
+
+import com.intellij.openapi.diagnostic.Logger;
 
 public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
+    private final Logger LOG = Logger.getInstance(this.getClass());
     private static final MarkerInfoCreator toListenerMarkerCreator = new ToListenerMarkerInfoCreator();
     private static final MarkerInfoCreator toSenderMarkerCreator = new ToSenderMarkerInfoCreator();
     private static final ArgumentValueCalculator calculator = new ArgumentValueCalculator();
+
+    public Front2BackMessageLineMarkerProvider() {
+        System.out.println("Front2BackMessageLineMarkerProvider created");
+        LOG.info("Front2BackMessageLineMarkerProvider created");
+    }
 
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
@@ -38,19 +48,18 @@ public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerPr
             String qualifierType = quelifierClass.getQualifiedName();
             String methodName = getCallMethodName((PsiMethodCallExpressionImpl) element);
             if (isSenderMethod(qualifierType, methodName)) {
-
-                Set<String> mqEntity = calculator.argumentValues((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
-                if (!mqEntity.isEmpty()) {
-                    result.add(toListenerMarkerCreator.createLineMarkerInfo((PsiMethodCallExpression) element));
-                }
+                addMarker((PsiMethodCallExpression) element, result, toListenerMarkerCreator);
+            } else if (isListenerMethod(element, quelifierClass, methodName)) {
+                addMarker((PsiMethodCallExpression) element, result, toSenderMarkerCreator);
             }
+        }
+    }
 
-            if (isListenerMethod(element, quelifierClass, methodName)) {
-                Set<String> mqEntity = calculator.argumentValues((PsiMethodCallExpression) element, MQENTITY_ARGUMENT_INDEX);
-                if (!mqEntity.isEmpty()) {
-                    result.add(toSenderMarkerCreator.createLineMarkerInfo((PsiMethodCallExpression) element));
-                }
-            }
+    private void addMarker(@NotNull PsiMethodCallExpression element, @NotNull Collection<? super RelatedItemLineMarkerInfo> result, MarkerInfoCreator toSenderMarkerCreator) {
+        Set<String> mqEntitys = calculator.argumentValues(element, MQENTITY_ARGUMENT_INDEX);
+        Set<String> mqOperations = calculator.argumentValues(element, MQOPERATION_ARGUMENT_INDEX);
+        if (!mqEntitys.isEmpty() && !mqOperations.isEmpty()) {
+            result.add(toSenderMarkerCreator.createLineMarkerInfo(element));
         }
     }
 

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public abstract class TargetSearcher {
 
     public static final int MQENTITY_ARGUMENT_INDEX = 0;
-    private static final int MQOPERATION_ARGUMENT_INDEX = 1;
+    public static final int MQOPERATION_ARGUMENT_INDEX = 1;
 
     private static final ArgumentValueCalculator calculator = new ArgumentValueCalculator();
 

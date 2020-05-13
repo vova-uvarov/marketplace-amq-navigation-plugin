@@ -1,20 +1,15 @@
 package com.vuvarov.marketplace.strategy.calculator;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiEnumConstant;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiVariable;
+import com.intellij.psi.*;
+import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
+import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.Query;
+import com.siyeh.ig.psiutils.MethodUtils;
 import com.vuvarov.marketplace.util.PsiCommonUtil;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.vuvarov.marketplace.util.PsiCommonUtil.getReturnValue;
@@ -52,6 +47,25 @@ public class ArgumentValueCalculator {
             }
 
             if (resolvedElement instanceof PsiVariable) {
+                if (resolvedElement instanceof PsiParameter) {
+                    PsiMethod method = PsiTreeUtil.getParentOfType(expression.getOriginalElement(), PsiMethod.class);
+                    if (method != null) {
+                        List<PsiMethod> allMethods = PsiCommonUtil.getAllSuperMethods(method);
+                        return allMethods.stream()
+                                .map(MethodReferencesSearch::search)
+                                .flatMap(q -> q.findAll().stream())
+                                .map(r -> {
+                                            if (r instanceof PsiMethodCallExpression) {
+                                                return (PsiMethodCallExpression) r;
+                                            }
+                                            return (PsiMethodCallExpression)((PsiReferenceExpression) r).getParent();
+                                        }
+                                )
+                                .map(m -> argumentValues(m, method.getParameterList().getParameterIndex((PsiParameter) resolvedElement)))
+                                .flatMap(Collection::stream)
+                                .collect(Collectors.toSet());
+                    }
+                }
                 return valueFromExpression(((PsiVariable) resolvedElement).getInitializer());
             }
         }

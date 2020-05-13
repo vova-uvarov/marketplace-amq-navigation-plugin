@@ -17,8 +17,10 @@ import com.intellij.psi.PsiStatement;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.impl.source.tree.java.PsiMethodCallExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.siyeh.ig.psiutils.MethodUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -47,19 +49,23 @@ public class PsiCommonUtil {
                 .orElse(null);
     }
 
-    public static List<PsiMethod> findMethods(GlobalSearchScope searchScope, String className, List<String> methodNames) {
-        if (searchScope == null) {
-            return Collections.emptyList();
+    public static List<PsiMethod> getAllSuperMethods(PsiMethod method) {
+        List<PsiMethod> result = new ArrayList<>();
+        PsiMethod searchedMethod = method;
+        while (searchedMethod != null) {
+            result.add(searchedMethod);
+            searchedMethod = MethodUtils.getSuper(searchedMethod);
         }
-        PsiClass listenerConfiguration = getClassByName(searchScope, className);
+        return result;
+    }
 
-        if (listenerConfiguration == null) {
-            System.out.println("not found class with name: " + className);
+    public static List<PsiMethod> findMethods(GlobalSearchScope searchScope, PsiClass psiClass, List<String> methodNames) {
+        if (searchScope == null) {
             return Collections.emptyList();
         }
 
         return methodNames.stream()
-                .map(methodName -> listenerConfiguration.findMethodsByName(methodName, false))
+                .map(methodName -> psiClass.findMethodsByName(methodName, false))
                 .flatMap(Stream::of)
                 .collect(Collectors.toList());
     }
