@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.vuvarov.marketplace.intellij.amq.plugin'
-version '0.1.9'
+version '0.1.10'
 
 sourceCompatibility = 1.8
 
@@ -24,7 +24,9 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      <br>0.1.9<br>
+      <br>0.1.10<br>
+        <em>change vendor</em>
+      <br>0.1.10<br>
         <em>fix homepage url</em>
       <br>0.1.8<br>
         <em>fix draw market into CurrencyTransferOrderValidationServiceImpl</em>

@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/vova-uvarov/marketplace-amq-navigation-plugin">
     <id>com.vuvarov.marketplace.intellij.amq.plugin</id>
     <name>MarketPlace Sender/Listener navigation</name>
-    <vendor email="vova.uvarov@gmail.com" url="http://www.yazago.site">Otk</vendor>
+    <vendor email="vova.uvarov@gmail.com" url="http://www.yazago.site">Vladimir Uvarov</vendor>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
