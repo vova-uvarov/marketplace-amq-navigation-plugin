@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-    <plugin id="com.vuvarov.marketplace.intellij.amq.plugin" url="http://ideaplugins.yazago.site:7887/plugins/marketplace-amq-navigation-plugin-0.1.10.zip" version="0.1.10">
+    <plugin id="com.vuvarov.marketplace.intellij.amq.plugin" url="http://ideaplugins.yazago.site:7887/plugins/marketplace-amq-navigation-plugin-1.0.0.zip" version="1.0.0">
         <idea-version since-build="IU-193" until-build="IU-201.*" />
     </plugin>
 
