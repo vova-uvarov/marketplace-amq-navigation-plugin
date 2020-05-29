@@ -1,12 +1,9 @@
 package com.vuvarov.marketplace.strategy.calculator;
 
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.search.searches.MethodReferencesSearch;
 import com.intellij.psi.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Query;
-import com.siyeh.ig.psiutils.MethodUtils;
 import com.vuvarov.marketplace.util.PsiCommonUtil;
 
 import java.util.*;
@@ -54,14 +51,8 @@ public class ArgumentValueCalculator {
                         return allMethods.stream()
                                 .map(MethodReferencesSearch::search)
                                 .flatMap(q -> q.findAll().stream())
-                                .map(r -> {
-                                            if (r instanceof PsiMethodCallExpression) {
-                                                return (PsiMethodCallExpression) r;
-                                            }
-                                            return (PsiMethodCallExpression)((PsiReferenceExpression) r).getParent();
-                                        }
-                                )
-                                .map(m -> argumentValues(m, method.getParameterList().getParameterIndex((PsiParameter) resolvedElement)))
+                                .map(this::toMethodCallExpression)
+                                .map(m -> argumentValues(m, calcParameterIndex((PsiParameter) resolvedElement, method)))
                                 .flatMap(Collection::stream)
                                 .collect(Collectors.toSet());
                     }
@@ -70,5 +61,16 @@ public class ArgumentValueCalculator {
             }
         }
         return Collections.emptySet();
+    }
+
+    private int calcParameterIndex(PsiParameter resolvedElement, PsiMethod method) {
+        return method.getParameterList().getParameterIndex(resolvedElement);
+    }
+
+    private PsiMethodCallExpression toMethodCallExpression(PsiReference r) {
+        if (r instanceof PsiMethodCallExpression) {
+            return (PsiMethodCallExpression) r;
+        }
+        return (PsiMethodCallExpression)((PsiReferenceExpression) r).getParent();
     }
 }
