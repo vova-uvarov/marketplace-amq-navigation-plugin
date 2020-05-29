@@ -26,7 +26,15 @@ public abstract class TargetSearcher {
     protected abstract List<PsiMethod> getPotencialMethods(PsiElement element);
 
     public Collection<? extends PsiElement> searchTargets(@NotNull PsiElement element) {
-        return searchTargetsInner(element, getPotencialMethods(element));
+        Collection<? extends PsiElement> targets = searchTargetsInner(element, getPotencialMethods(element));
+//        todo hack for filter super method
+        return targets.stream()
+                .filter(t -> {
+                    if (t instanceof PsiReference) {
+                        return !((PsiReference) t).getCanonicalText().equals("super.configure");
+                    }
+                    return true;
+                }).collect(Collectors.toList());
     }
 
     @NotNull

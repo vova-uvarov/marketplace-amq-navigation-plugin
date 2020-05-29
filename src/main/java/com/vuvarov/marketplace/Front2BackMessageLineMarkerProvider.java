@@ -2,12 +2,12 @@ package com.vuvarov.marketplace;
 
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.impl.source.tree.java.PsiMethodCallExpressionImpl;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.InheritanceUtil;
 import com.vuvarov.marketplace.strategy.calculator.ArgumentValueCalculator;
 import com.vuvarov.marketplace.strategy.creator.MarkerInfoCreator;
 import com.vuvarov.marketplace.strategy.creator.ToListenerMarkerInfoCreator;
@@ -23,9 +23,10 @@ import static com.vuvarov.marketplace.strategy.target.searcher.SendersSearcher.A
 import static com.vuvarov.marketplace.strategy.target.searcher.SendersSearcher.SENDER_METHODS;
 import static com.vuvarov.marketplace.strategy.target.searcher.TargetSearcher.MQENTITY_ARGUMENT_INDEX;
 import static com.vuvarov.marketplace.strategy.target.searcher.TargetSearcher.MQOPERATION_ARGUMENT_INDEX;
-import static com.vuvarov.marketplace.util.PsiCommonUtil.*;
-
-import com.intellij.openapi.diagnostic.Logger;
+import static com.vuvarov.marketplace.util.PsiCommonUtil.getCallMethodName;
+import static com.vuvarov.marketplace.util.PsiCommonUtil.getClassByName;
+import static com.vuvarov.marketplace.util.PsiCommonUtil.getQuelifierClass;
+import static com.vuvarov.marketplace.util.PsiCommonUtil.getScope;
 
 public class Front2BackMessageLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
