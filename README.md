@@ -18,3 +18,6 @@ listener.configure(CONVERSION_DOCUMENT, VALIDATE, ENTITY_TYPE_REF, backendServic
 
 Тут так же 1-й и 2-й параметры определяют объект и действие. Они так же могут быть не только константами. 
 Плагин как раз рисует маркеры для навигации между amqUtil.sendAndReceiveMessage и соответсвующим ему listener.configure
+
+
+![marker](https://user-images.githubusercontent.com/671114/83253841-55926a00-a1b6-11ea-974f-a81ea02218d6.png)
