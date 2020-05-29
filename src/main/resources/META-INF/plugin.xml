@@ -1,4 +1,4 @@
-<idea-plugin>
+<idea-plugin url="https://github.com/vova-uvarov/marketplace-amq-navigation-plugin">
     <id>com.vuvarov.marketplace.intellij.amq.plugin</id>
     <name>MarketPlace Sender/Listener navigation</name>
     <vendor email="vova.uvarov@gmail.com" url="http://www.yazago.site">Otk</vendor>
