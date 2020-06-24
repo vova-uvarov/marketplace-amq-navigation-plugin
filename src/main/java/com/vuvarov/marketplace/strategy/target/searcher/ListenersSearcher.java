@@ -17,7 +17,7 @@ import static com.vuvarov.marketplace.util.PsiCommonUtil.*;
 
 public class ListenersSearcher extends TargetSearcher {
     public static final String BASE_JMS_LISTENER_CLASS_NAME = "ru.openbank.marketplace.util.configuration.listener.AbstractJmsListener";
-    public static final List<String> LISTENER_METHODS = Arrays.asList("configure", "configureProducer", "configureConsumer");
+    public static final List<String> LISTENER_METHODS = Arrays.asList("configure", "configureProducer", "configureConsumer", "configureNullResponse");
 
     @Override
     protected List<PsiMethod> getPotencialMethods(PsiElement element) {

@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.vuvarov.marketplace.intellij.amq.plugin'
-version '1.0.0'
+version '1.0.1'
 
 sourceCompatibility = 1.8
 
@@ -24,7 +24,9 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-      <br>1.0.00<br>
+     <br>1.0.1<br>
+        <em>configureNullResponse to search listener methods</em>
+      <br>1.0.0<br>
         <em>add logo</em>
       <br>0.1.10<br>
         <em>change vendor</em>
