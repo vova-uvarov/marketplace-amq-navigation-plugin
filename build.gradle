@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.vuvarov.marketplace.intellij.amq.plugin'
-version '1.0.1'
+version '1.0.2'
 
 sourceCompatibility = 1.8
 
@@ -33,10 +33,9 @@ patchPluginXml {
       <br>0.1.9<br>
         <em>fix homepage url</em>
       <br>0.1.8<br>
-        <em>fix draw market into CurrencyTransferOrderValidationServiceImpl</em>
-      <br>0.1.7<br>
-        <em>show message if target not found</em>
+      <em>fix draw market into CurrencyTransferOrderValidationServiceImpl</em>
       <br>previous versions:<br>
+      <em>show message if target not found</em>
       <em>fix NPE</em>
       <em>add configureConsumer to search listener methods</em>
       <em>fix search listener. search abstractlistener adn tour inheritor</em>
