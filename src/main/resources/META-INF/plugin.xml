@@ -8,11 +8,19 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
 
+    <extensionPoints>
+
+    </extensionPoints>
     <extensions defaultExtensionNs="com.intellij">
         <codeInsight.lineMarkerProvider language="JAVA"
                                         implementationClass="com.vuvarov.marketplace.Front2BackMessageLineMarkerProvider">
 
         </codeInsight.lineMarkerProvider>
+
+        <callHierarchyProvider  language="JAVA" implementationClass="com.vuvarov.marketplace.Front2BackCallHierarchyProvider"
+        order="first">
+
+        </callHierarchyProvider>
         <!-- Add your extensions here -->
     </extensions>
 
