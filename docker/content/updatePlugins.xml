@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-    <plugin id="com.vuvarov.marketplace.intellij.amq.plugin" url="http://ideaplugins.yazago.site/plugins/marketplace-amq-navigation-plugin-1.0.2.zip" version="1.0.2">
-        <idea-version since-build="IU-193" until-build="IU-202.*" />
+    <plugin id="com.vuvarov.marketplace.intellij.amq.plugin" url="http://ideaplugins.yazago.site/plugins/marketplace-amq-navigation-plugin-1.0.3.zip" version="1.0.3">
+        <idea-version since-build="IU-193" until-build="IU-203.*" />
     </plugin>
 
 </plugins>
